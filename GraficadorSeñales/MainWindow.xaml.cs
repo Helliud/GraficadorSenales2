@@ -338,6 +338,8 @@ namespace GraficadorSeñales
                     break;
 
                 case 1: //Multiplicacion
+                    señalResultado = Señal.multiplicar(señal, segundaSeñal);
+
                     break;
                 default:
                     break;
