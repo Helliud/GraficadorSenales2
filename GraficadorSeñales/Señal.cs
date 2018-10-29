@@ -38,15 +38,15 @@ namespace GraficadorSeñales
                 }
 
             }
-            
+
         }
 
         public void escalar(double factor)
         {
-            foreach(Muestra muestra in Muestras)
+            foreach (Muestra muestra in Muestras)
             {
                 muestra.Y *= factor; //Se va a multiplicar  
-                                
+
             }
 
         }
@@ -54,7 +54,7 @@ namespace GraficadorSeñales
         public void actualizarAmplitudMaxima() //La resetea
         {
             AmplitudMaxima = 0;
-            foreach(Muestra muestra in Muestras)
+            foreach (Muestra muestra in Muestras)
             {
                 if (Math.Abs(muestra.Y) > AmplitudMaxima)
                 {
@@ -70,21 +70,21 @@ namespace GraficadorSeñales
         {
             foreach (Muestra muestra in Muestras)
             {
-                muestra.Y += factor;  
+                muestra.Y += factor;
 
             }
         }
 
         public void truncar(double umbral)
         {
-            
+
             foreach (Muestra muestra in Muestras)
             {
                 if (muestra.Y > umbral)
                 {
                     muestra.Y = umbral;
                 }
-                else if (muestra.Y < (- 1 * umbral))
+                else if (muestra.Y < (-1 * umbral))
                 {
                     muestra.Y = -1 * umbral;
                 }
@@ -92,7 +92,7 @@ namespace GraficadorSeñales
             }
 
         }
-        
+
 
         public static Señal sumar(Señal sumando1, Señal sumando2)
         {
@@ -141,6 +141,46 @@ namespace GraficadorSeñales
             return resultado;
 
         }
-    }
+
+        public static Señal convolucionar(Señal operando1, Señal operando2)
+        {
+            SeñalPersonalizada resultado = new SeñalPersonalizada();
+
+            resultado.TiempoInicial = operando1.TiempoInicial + operando2.TiempoFinal;
+
+            resultado.TiempoFinal = operando1.TiempoFinal + operando2.TiempoFinal;
+
+            resultado.FrecuenciaMuestreo = operando1.FrecuenciaMuestreo;
+
+            double periodoMuestreo = 1 / resultado.FrecuenciaMuestreo;
+
+            double duracionSeñal = resultado.TiempoFinal - resultado.TiempoInicial;
+
+            double cantidadMuestrasResultado = duracionSeñal * resultado.FrecuenciaMuestreo;
+
+            double instanteActual = resultado.TiempoInicial;
+
+            for (int n = 0; n < cantidadMuestrasResultado; n++)
+            {
+                double valorMuestra = 0;
+                for(int k=0; k < operando2.Muestras.Count; k++)
+                {
+                    if((n-k) >= 0 && (n-k) < operando2.Muestras.Count)
+                    {
+                        valorMuestra += operando1.Muestras[k].Y * operando2.Muestras[n - k].Y;
+
+                    }
+
+                }
+                Muestra muestra = new Muestra(instanteActual, valorMuestra);
+
+                resultado.Muestras.Add(muestra);
+                instanteActual += periodoMuestreo;
+            }
+
+            return resultado;
+        }
+            
+            }
 
 }

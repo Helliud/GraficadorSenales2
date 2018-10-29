@@ -339,8 +339,12 @@ namespace GraficadorSeñales
 
                 case 1: //Multiplicacion
                     señalResultado = Señal.multiplicar(señal, segundaSeñal);
-
                     break;
+
+                case 2: //Convolcion
+                    señalResultado = Señal.convolucionar(señal, segundaSeñal);
+                    break;
+
                 default:
                     break;
             }
