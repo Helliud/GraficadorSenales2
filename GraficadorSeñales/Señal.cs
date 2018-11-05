@@ -172,6 +172,10 @@ namespace GraficadorSeñales
                     }
 
                 }
+
+
+                valorMuestra /= resultado.FrecuenciaMuestreo;
+
                 Muestra muestra = new Muestra(instanteActual, valorMuestra);
 
                 resultado.Muestras.Add(muestra);
